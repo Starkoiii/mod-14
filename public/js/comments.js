@@ -1,24 +1,25 @@
-header, .project:not(:last-child) {
-  border-bottom: 1px solid #ccc;
-}
+const commentFormHandler = async function (event) {
+  event.preventDefault();
 
-.no-button {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: #1b89bc;
-  text-decoration: none;
-  font-size: 100%;
-}
+  const blog_id = document.querySelector('.new-comment-form').dataset.blog_id;
 
-.no-button:hover {
-  color: #065b83;
-  text-decoration: underline;
-}
+  const text = document.querySelector('#comment').value.trim();
+  // console.log(blogId, text);
+  if(text) {
+    await fetch('/api/comments', {
+      method: 'POST',
+      body: JSON.stringify({
+        blog_id,
+        text,
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    document.location.reload();
+  }
+};
 
-.dollar-amount {
-  color: #056605;
-  font-weight: bold;
-  margin-left: -5px;
-}
+document
+  .querySelector('.new-comment-form')
+  .addEventListener('submit', commentFormHandler);
